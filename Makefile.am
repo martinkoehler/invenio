@@ -27,8 +27,8 @@ EXTRA_DIST = UNINSTALL THANKS RELEASE-NOTES configure-tests.py config.nice.in \
 
 # current MathJax version and packages
 # See also modules/miscutil/lib/htmlutils.py (get_mathjax_header)
-MJV = 2.3
-MATHJAX = http://invenio-software.org/download/mathjax/MathJax-v$(MJV).zip
+MJV = 2.6
+MATHJAX = https://github.com/mathjax/MathJax/archive/v$(MJV)-latest.zip
 
 # current CKeditor version
 CKV = 3.6.6
