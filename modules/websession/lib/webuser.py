@@ -1343,6 +1343,7 @@ def collect_user_info(req, login_time=False, refresh=False):
             if login_time:
                 ## Heavy computational information
                 from invenio.access_control_engine import acc_authorize_action
+                from invenio.search_engine import get_permitted_restricted_collections
                 user_info['precached_permitted_restricted_collections'] = get_permitted_restricted_collections(user_info)
                 user_info['precached_usebaskets'] = acc_authorize_action(user_info, 'usebaskets')[0] == 0
                 user_info['precached_useloans'] = acc_authorize_action(user_info, 'useloans')[0] == 0
@@ -1391,7 +1392,9 @@ def collect_user_info(req, login_time=False, refresh=False):
                 user_info['precached_usepaperclaim'] = usepaperclaim
                 user_info['precached_usepaperattribution'] = usepaperattribution
         else: # guest user
-                user_info['precached_permitted_restricted_collections'] = get_permitted_restricted_collections(user_info)
+                if not user_info['precached_permitted_restricted_collections']:
+                    from invenio.search_engine import get_permitted_restricted_collections 
+                    user_info['precached_permitted_restricted_collections'] = get_permitted_restricted_collections(user_info)
 
     except Exception, e:
         register_exception()
