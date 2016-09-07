@@ -69,7 +69,7 @@ class DataCacher(object):
         self.cache = self.cache_filler()
         self.timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         # The cache is considered clean for 10 seconds
-        self.cleanstamp = datetime.datetime.now() + datetime.timedelta(seconds = 10)
+        self.cleanstamp = datetime.datetime.now() + datetime.timedelta(seconds = 3)
 
     def recreate_cache_if_needed(self):
         """
@@ -81,6 +81,9 @@ class DataCacher(object):
             return
         if self.timestamp_verifier() > self.timestamp:
             self.create_cache()
+        else:
+            # The cache is considered clean for 10 seconds
+            self.cleanstamp = datetime.datetime.now() + datetime.timedelta(seconds = 3)
 
 class SQLDataCacher(DataCacher):
     """
