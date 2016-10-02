@@ -1193,7 +1193,6 @@ def collect_user_info(req, login_time=False, refresh=False):
     is saved into req._user_info (for caching purpouses)
     setApacheUser & setUid will properly reset it.
     """
-    from invenio.search_engine import get_permitted_restricted_collections
     user_info = {
         'remote_ip' : '',
         'remote_host' : '',
@@ -1206,7 +1205,8 @@ def collect_user_info(req, login_time=False, refresh=False):
         'group' : [],
         'guest' : '1',
         'session' : None,
-        'precached_permitted_restricted_collections' : [],
+        # Fix vor join2 performancece problems
+        'precached_permitted_restricted_collections' : ['UNRESTRICTED'],
         'precached_usebaskets' : False,
         'precached_useloans' : False,
         'precached_usegroups' : False,
@@ -1343,6 +1343,7 @@ def collect_user_info(req, login_time=False, refresh=False):
             if login_time:
                 ## Heavy computational information
                 from invenio.access_control_engine import acc_authorize_action
+                from invenio.search_engine import get_permitted_restricted_collections
                 user_info['precached_permitted_restricted_collections'] = get_permitted_restricted_collections(user_info)
                 user_info['precached_usebaskets'] = acc_authorize_action(user_info, 'usebaskets')[0] == 0
                 user_info['precached_useloans'] = acc_authorize_action(user_info, 'useloans')[0] == 0
@@ -1390,7 +1391,7 @@ def collect_user_info(req, login_time=False, refresh=False):
                 user_info['precached_viewclaimlink'] = viewclaimlink
                 user_info['precached_usepaperclaim'] = usepaperclaim
                 user_info['precached_usepaperattribution'] = usepaperattribution
-
+       
     except Exception, e:
         register_exception()
     return user_info

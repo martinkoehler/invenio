@@ -24,6 +24,7 @@ rarely change.
 
 from invenio.dbquery import run_sql, get_table_update_time
 import time
+import datetime
 
 class InvenioDataCacherError(Exception):
     """Error raised by data cacher."""
@@ -67,14 +68,22 @@ class DataCacher(object):
         """
         self.cache = self.cache_filler()
         self.timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        # The cache is considered clean for 3 seconds
+        self.cleanstamp = datetime.datetime.now() + datetime.timedelta(seconds = 3)
 
     def recreate_cache_if_needed(self):
         """
         Recreate cache if needed, by verifying the cache timestamp
         against the timestamp verifier function.
         """
+        if self.cleanstamp > datetime.datetime.now():
+            # No need to verify the cache
+            return
         if self.timestamp_verifier() > self.timestamp:
             self.create_cache()
+        else:
+            # The cache is considered clean for 3 seconds
+            self.cleanstamp = datetime.datetime.now() + datetime.timedelta(seconds = 3)
 
 class SQLDataCacher(DataCacher):
     """
