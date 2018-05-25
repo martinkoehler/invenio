@@ -1,3 +1,10 @@
+..
+    This file is part of Invenio.
+    Copyright (C) 2015-2018 CERN.
+
+    Invenio is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+
 Installation
 ============
 
@@ -16,4 +23,4 @@ all the needed services such as PostgreSQL, Elasticsearch, Redis, RabbitMQ.
 
 For a detailed walk-through on how to set up your Invenio instance, please see
 our `installation documentation
-<http://pythonhosted.org/invenio/installation/index.html>`_.
+<http://invenio.readthedocs.io/en/latest/installation/index.html>`_.

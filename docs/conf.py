@@ -1,26 +1,10 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015, 2016 CERN.
+# Copyright (C) 2015-2018 CERN.
 #
-# Invenio is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of the
-# License, or (at your option) any later version.
-#
-# Invenio is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Invenio; if not, write to the
-# Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-# MA 02111-1307, USA.
-#
-# In applying this license, CERN does not
-# waive the privileges and immunities granted to it by virtue of its status
-# as an Intergovernmental Organization or submit itself to any jurisdiction.
+# Invenio is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
 
 from __future__ import print_function
 
@@ -42,10 +26,11 @@ suppress_warnings = ['image.nonlocal_uri']
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
+    'sphinx.ext.doctest',
     'sphinx.ext.graphviz',
     'sphinx.ext.intersphinx',
-    'sphinx.ext.doctest',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
 
@@ -127,7 +112,7 @@ pygments_style = 'sphinx'
 #keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
+todo_include_todos = True
 
 
 # -- Options for HTML output ----------------------------------------------
@@ -141,6 +126,7 @@ html_theme_options = {
     'github_button': False,
     'github_banner': True,
     'show_powered_by': False,
+    'sidebar_collapse': True,
     'extra_nav_links': {
         'invenio@GitHub': 'https://github.com/inveniosoftware/invenio',
         'invenio@PyPI': 'https://pypi.python.org/pypi/invenio/',
@@ -335,15 +321,15 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/2.7/', None),
-    'flaskregistry': ('https://flask-registry.readthedocs.org/en/latest/',
+    'flaskregistry': ('https://flask-registry.readthedocs.io/en/latest/',
                       None),
     'werkzeug': ('http://werkzeug.pocoo.org/docs/', None),
     'flask': ('http://flask.pocoo.org/docs/', None),
-    'flaskassets': ('https://flask-assets.readthedocs.org/en/latest/', None),
-    'flaskscript': ('https://flask-script.readthedocs.org/en/latest/', None),
+    'flaskassets': ('https://flask-assets.readthedocs.io/en/latest/', None),
+    'flaskscript': ('https://flask-script.readthedocs.io/en/latest/', None),
     'sqlalchemy': ('http://docs.sqlalchemy.org/en/latest/', None),
     'jinja': ('http://jinja.pocoo.org/docs/', None),
-    'webassets': ('https://webassets.readthedocs.org/en/latest/', None),
+    'webassets': ('https://webassets.readthedocs.io/en/latest/', None),
 }
 
 # Autodoc configuraton.

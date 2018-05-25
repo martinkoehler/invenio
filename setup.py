@@ -1,125 +1,108 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2013, 2014, 2015, 2016 CERN.
+# Copyright (C) 2015-2018 CERN.
 #
-# Invenio is free software; you can redistribute it
-# and/or modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of the
-# License, or (at your option) any later version.
-#
-# Invenio is distributed in the hope that it will be
-# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Invenio; if not, write to the
-# Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-# MA 02111-1307, USA.
-#
-# In applying this license, CERN does not
-# waive the privileges and immunities granted to it by virtue of its status
-# as an Intergovernmental Organization or submit itself to any jurisdiction.
+# Invenio is free software; you can redistribute it and/or modify it
+# under the terms of the MIT License; see LICENSE file for more details.
 
 """Invenio Digital Library Framework."""
 
 import os
-import sys
 
 from setuptools import find_packages, setup
-from setuptools.command.test import test as TestCommand
 
 readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
-    'check-manifest>=0.25',
-    'coverage>=4.0',
-    'isort>=4.2.2',
-    'pydocstyle>=1.0.0',
-    'pytest-cache>=1.0',
-    'pytest-cov>=1.8.0',
+    'check-manifest>=0.35',
+    'coverage>=4.4.1',
+    'isort>=4.3',
+    'pydocstyle>=2.0.0',
+    'pytest-cov>=2.5.1',
     'pytest-pep8>=1.0.6',
-    'pytest>=2.8.0',
+    'pytest>=3.3.1',
+    'pytest-invenio>=1.0.0,<1.1.0',
 ]
 
-invenio_db_version = '>=1.0.0a10,<1.1.0'
+db_version = '>=1.0.1,<1.1.0'
+search_version = '>=1.0.0,<1.1.0'
 
 extras_require = {
-    'access': [
-        'invenio-access>=1.0.0a8,<1.1.0',
+    # Bundles
+    'base': [
+        'invenio-admin>=1.0.0,<1.1.0',
+        'invenio-assets>=1.0.0,<1.1.0',
+        'invenio-formatter>=1.0.0,<1.1.0',
+        'invenio-logging>=1.0.0,<1.1.0',
+        'invenio-mail>=1.0.0,<1.1.0',
+        'invenio-rest>=1.0.0,<1.1.0',
+        'invenio-theme>=1.0.0,<1.1.0',
     ],
-    'accounts': [
-        'invenio-accounts>=1.0.0a13,<1.1.0',
+    'auth': [
+        'invenio-access>=1.0.0,<1.1.0',
+        'invenio-accounts>=1.0.0,<1.1.0',
+        'invenio-oauth2server>=1.0.0,<1.1.0',
+        'invenio-oauthclient>=1.0.0,<1.1.0',
+        'invenio-userprofiles>=1.0.0,<1.1.0',
     ],
-    'records': [
-        'dojson>=1.2.1',
-        'invenio-pidstore>=1.0.0a9,<1.1.0',
-        'invenio-records>=1.0.0a17,<1.1.0',
-        'invenio-records-ui>=1.0.0a7,<1.1.0',
-        'invenio-records-rest>=1.0.0a15,<1.1.0',
+    'metadata': [
+        'invenio-indexer>=1.0.0,<1.1.0',
+        'invenio-jsonschemas>=1.0.0,<1.1.0',
+        'invenio-oaiserver>=1.0.0,<1.1.0',
+        'invenio-pidstore>=1.0.0,<1.1.0',
+        'invenio-records-rest>=1.0.0,<1.1.0',
+        'invenio-records-ui>=1.0.0,<1.1.0',
+        'invenio-records>=1.0.0,<1.1.0',
+        'invenio-search-ui>=1.0.0,<1.1.0',
     ],
-    'search': [
-        'invenio-search>=1.0.0a7,<1.1.0',
-    ],
-    'theme': [
-        'invenio-assets>=1.0.0a5,<1.1.0',
-        'invenio-theme>=1.0.0a13,<1.1.0',
-    ],
-    'utils': [
-        'invenio-mail>=1.0.0a4,<1.1.0',
-        'invenio-rest>=1.0.0a9,<1.1.0',
-        'invenio-logging>=1.0.0a2,<1.1.0',
+    # Database version
+    'postgresql': [
+        'invenio-db[postgresql,versioning]{}'.format(db_version),
     ],
     'mysql': [
-        'invenio-db[mysql]' + invenio_db_version,
+        'invenio-db[mysql,versioning]{}'.format(db_version),
     ],
-    'postgresql': [
-        'invenio-db[postgresql]' + invenio_db_version,
+    'sqlite': [
+        'invenio-db[versioning]{}'.format(db_version),
     ],
+    # Elasticsearch version
+    'elasticsearch2': [
+        'invenio-search[elasticsearch2]{}'.format(search_version),
+    ],
+    'elasticsearch5': [
+        'invenio-search[elasticsearch5]{}'.format(search_version),
+    ],
+    'elasticsearch6': [
+        'invenio-search[elasticsearch6]{}'.format(search_version),
+    ],
+    # Docs and test dependencies
     'docs': [
-        'Sphinx>=1.4.2',
+        'Sphinx>=1.5.1',
     ],
     'tests': tests_require,
 }
 
-#
-# Aliases allow for easy installation of a specific type of Invenio instances.
-#   pip install invenio[repository]
-#
-aliases = {
-    'minimal': ['accounts', 'theme', 'utils', ],
-    'full': ['access', 'accounts', 'records', 'search', 'theme', 'utils'],
-}
-
-for name, requires in aliases.items():
-    extras_require[name] = []
-    for r in requires:
-        extras_require[name].extend(extras_require[r])
-
-# All alias to install every possible dependency.
 extras_require['all'] = []
 for name, reqs in extras_require.items():
-    if name in {'mysql', 'postgresql'}:
+    if name in ('sqlite', 'mysql', 'postgresql') \
+            or name.startswith('elasticsearch'):
         continue
     extras_require['all'].extend(reqs)
 
-#
-# Minimal required packages for an Invenio instance (basically just the
-# Flask application loading).
-#
+
 setup_requires = [
-    'pytest-runner>=2.6.2',
-    'Babel>=1.3',
+    'pytest-runner>=3.0.0,<5',
 ]
 
 install_requires = [
     'Flask>=0.11.1',
-    'invenio-base>=1.0.0a6,<1.1.0',
-    'invenio-celery>=1.0.0a2,<1.1.0',
-    'invenio-config>=1.0.0a1,<1.1.0',
-    'invenio-i18n>=1.0.0a1,<1.1.0',
+    'invenio-app>=1.0.0,<1.1.0',
+    'invenio-base>=1.0.0,<1.1.0',
+    'invenio-celery>=1.0.0,<1.1.0',
+    'invenio-config>=1.0.0,<1.1.0',
+    'invenio-i18n>=1.0.0,<1.1.0',
 ]
 
 packages = find_packages()
@@ -136,7 +119,7 @@ setup(
     description=__doc__,
     long_description=readme + '\n\n' + history,
     keywords='Invenio digital library framework',
-    license='GPLv2',
+    license='MIT',
     author='CERN',
     author_email='info@inveniosoftware.org',
     url='https://github.com/inveniosoftware/invenio',
@@ -152,7 +135,7 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
@@ -161,6 +144,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
     ],
 )
